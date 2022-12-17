@@ -21,7 +21,7 @@ Supper MOSFET Calculator (SMC)
 
 
 ## Time
-### 2021.03.03 - 2021.03.07
+2021.03.03 - 2021.03.07
 
 ## Notes
 + Combinational Circuit Design
