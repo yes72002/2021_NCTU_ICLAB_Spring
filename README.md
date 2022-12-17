@@ -5,10 +5,10 @@ NCTU 2021 Spring Integrated Circuit Design Laboratory (ICLAB)
 ### 2021.02.24 - 2021.06.16
 
 ## Labs
-Combinational Circuit Design
+### Combinational Circuit Design
 + Lab01: Supper MOSFET Calculator
 
-Sequential Circuit Design
+### Sequential Circuit Design
 + Lab02: String Match Engine
 
 Testbench and Pattern
