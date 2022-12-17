@@ -2,11 +2,9 @@
 NCTU 2021 Spring Integrated Circuit Design Laboratory (ICLAB)
 
 ## Time
----
 ### 2021.02.24 - 2021.06.16
 
 ## Labs
----
 Combinational Circuit Design
 + Lab01: Supper MOSFET Calculator
 
