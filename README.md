@@ -11,34 +11,34 @@ NCTU 2021 Spring Integrated Circuit Design Laboratory (ICLAB)
 ### Sequential Circuit Design
 + Lab02: String Match Engine
 
-Testbench and Pattern
+### Testbench and Pattern
 + Lab03: Sudoku
 
-Advanced Sequential Circuit Design (Timing & IP)
+### Advanced Sequential Circuit Design (Timing & IP)
 + Lab04: Artificial Neural Network
 
-Macros and SRAM (generate)
+### Macros and SRAM (generate)
 + Lab05: Matrix Computation
 
-Synthesis Flow with Synopsys Design Compiler
+### Synthesis Flow with Synopsys Design Compiler
 + Lab06: CheckSum
 + Midterm Project: Advanced Microcontroller Bus Architecture
 
-Static Timing Analysis
+### Static Timing Analysis
 + Lab07: Polish Notation
 
-Low Power Design
+### Low Power Design
 + Lab08: Series Processiong
 
-SystemVerilog and Advanced Testbench
+### SystemVerilog and Advanced Testbench
 + Lab09: Happy Farm
 
-Coverage and Assertion
+### Coverage and Assertion
 + Lab10: Coverage of Lab09 Happy Farm
 
-Cell-Based APR Design Flow
+### Cell-Based APR Design Flow
 + Lab11: Matrix Computation (MC)
 
-APRII: Things to do after layout
+### APRII: Things to do after layout
 + Lab12: Artificial Neural Network APRII
 + Final Project: Customized ISA Processor
