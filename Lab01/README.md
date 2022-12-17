@@ -2,11 +2,9 @@
 NCTU 2021 Spring Integrated Circuit Design Laboratory (ICLAB)
 
 ## Course Content
----
 Combinational Circuit Design
 
 ## Design
----
 Lab01 Exercise  
 Supper MOSFET Calculator (SMC)  
  
@@ -23,11 +21,9 @@ Supper MOSFET Calculator (SMC)
 
 
 ## Time
----
 ### 2021.03.03 - 2021.03.07
 
 ## Notes
----
 + Combinational Circuit Design
 + input, output
 + wire, reg
