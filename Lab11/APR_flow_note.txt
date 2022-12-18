@@ -1,0 +1,90 @@
+APR_flow
+Page.1
+1. Data Preparation
+  3. Prepare chip design netlist:
+    Please calculate how many I/O and core power pads you need,
+    and complete the netlist of pad cells (size and action)
+    參考講義Lec11_Cell_Based_APR_Flow第11頁跟REF_CHIP_SHELL.v
+    通常以4的倍數為主，讓每一邊PAD都有POWER
+    (TA      : 12 inputs, 12 outputs, 4 I/O VDDGND, 4 core VDDGND)
+    (ChongSin: 11 inputs, 9 outputs,  4 I/O VDDGND, 4 core VDDGND)
+    (YuanJin : 40 inputs, 28 outputs, 8 I/O VDDGND, 8 core VDDGND)
+
+  4. Prepare I/O pad location file:
+    b. Open CHIP.io and complete the I/O pad location assignment according 
+       to the netlist of pad cells in CHIP_SYN.v (size and action).
+    參考講義Lec11_Cell_Based_APR_Flow第13頁跟REF.io，
+    可以先打開合併後的檔案CHIP_SYN.v來參照而寫出CHIP.io
+
+2. Reading Cell Library information and Netlist for APR
+  Step 2 to step 4每一次開啟innovus都要打，會在Restore design.inn出問題
+set init_design_uniquify 1
+setDesignMode -process 180
+suppressMessage TECHLIB 1318
+
+
+接下來的要打字的部分大多可以複製貼上，先複製起來，再滑鼠滾輪貼上
+例如: lib_max, lib_min, RC_Corner, Delay_Corner_max, Delay_Corner_min等等。
+
+
+Page.6
+在設定Core面積的時候可以改變Core到Pad的值來縮小Core面積，設大於100，
+或直接改Die Size by Width and Height。
+
+在排版Memory的時候可以把他放靠近邊界，或甚至超過他(盡量不要)。
+
+Page.8
+VDD跟GND也可以先打好複製貼上，第8點沒有memory則不用做。
+GND VDD
+
+Page.9
+GND VDD也可以先打好複製起來，之後也會用到。
+
+Page.17
+在驗DRC的時候如果出現錯誤建議改掉IO布局。
+
+在驗LVS的時候如果出現整面錯誤的情況則要重新排版，
+如果出現Stripe在Memory而有error改不掉也要重新排版。
+
+Page.20
+第一次優化會優很久，如果出現負的還是要一直優化直到正的為止，試了10次都沒辦法
+就要考慮重新排版或是增加clock週期了。
+
+優化後如果跑LVS會不過，不用管他。
+
+Page.21
+這些指令也都可以用滾輪複製貼上。
+set_ccopt_property update_io_latency false
+create_ccopt_clock_tree_spec -file CHIP.CCOPT.spec -keep_all_sdc_clocks
+source CHIP.CCOPT.spec
+ccopt_design
+
+Page.23
+這些指令也都可以用滾輪複製貼上。
+addIoFiller -cell PFILL -prefix IOFILLER
+addIoFiller -cell PFILL_9 -prefix IOFILLER
+addIoFiller -cell PFILL_1 -prefix IOFILLER
+addIoFiller -cell PFILL_01 -prefix IOFILLER -fillAnyGap
+
+ANTENNA
+
+Page.26
+第18點Timing Analysis (Signoff)就可以不用做，好像retore會有error
+setDelayCalMode -siMode signoff
+
+Page.28
+write_sdf CHIP.sdf
+
+Page.29
+如果最後06 fail代表中間slack是有負的情況又繼續做下去，所以要回去重做，
+或是slack都是正的，代表clock period真的不能到那麼短，要回去改sdf在完全重做。
+
+最後Congratulation for pass all patterns.
+
+要看面積可以點Summary Report Button(shift+Q)
+資料夾05_APR/summaryReport/CHIP.main.html 用 chrome開啟
+-> Total area of Chip
+
+.view .golbals 不能複製，雖然複製出來可以跑05，但06會出錯
+推測是吃到原本資料夾的檔案
+同一個資料夾也不行
