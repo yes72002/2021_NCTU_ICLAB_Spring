@@ -6,7 +6,7 @@ Cell-Based APR Design Flow
 
 ## Design
 Lab11 Exercise  
-APR Matrix Computation  (From Lab05)
+APR Matrix Computation (From Lab05)
 
 | Input | Description |
 | --- | --- |
