@@ -1,0 +1,156 @@
+因為latency不能超過2000所以要猜成兩部分狀態來存全部的inst
+S_CACHE1 S_CACHE2
+
+因為指令只會執行一次，可以不用全部存起來，有必要時存前64個即可
+，而猜測助教PATTERN只會有兩種可能，一種跳個幾次之後快結束時會無窮迴圈一直執行，再由PATTERN結束模擬
+或是真的跳跳跳執行到最後一行。
+只要針對這兩種情況優化即可
+ 127   01111111
+  64   01000000 this 128個位置JUMP要存的
+  63   00111111
+   0   00000000   to
+  -1   11111111
+  -2   11111110
+ -63   11000001 this
+ -64   11000000
+-127   10000001
+-128   10000000
+
+immediate only 5 bits
+ 15 01111
+  1 00001
+  0 00000
+ -1 11111
+ -2 11110
+-14 10010
+-15 10001
+-16 10000
+
+用pipeline
+這個cycle選擇rs rt function
+下個cycle運算結果
+
+如果跳的是正的 就要讀DRAM
+跳的是負的 要讀SRAM 往回跳最多64 所以存64?
+不對 有可能往下跳64的位置剛好往回跳16這時會沒存到 要再讀DRAM
+
+SRAM要怎麼存又是個問題
+SRAM不能移位 所以可能會是64 65 66 3 ... 63 這種情形 那就要判斷是怎樣了哈哈哭阿
+
+解答: 後來解法就是把還沒執行的指令的往前64個地址到往後127或255存起來
+最後我少做了一些條件
+一個是執行到最後一行指令沒有停止
+另一個是剛好在第1824個指令要跳會有問題
+
+助教PATTERN在執行最後一行指令後會馬上停止，所以沒關係
+助教PATTERN的JUMP指令數量很少，也沒關係
+
+PATTERN
+pseudo_DRAM_data
+pseudo_DRAM_inst
+TESTBED
+CPU
+syn.tcl
+CPU_1
+PATTERN_WEI2
+CPU_2
+--------
+DRAM_data
+DRAM_inst
+AMBA_9
+CPU
+CPU_2
+
+syn.tcl
+第62,63行要取消註解，就是改成這樣(wrong)
+第64,65行要註解，不要是0(wrong)
+不對，AXI訊號的delay要設0
+
+2021.06.17
+06一直跑不過是因為clk經過buffer後會有延遲導致SRAM吃不到Data
+最後Q出來就會unknown
+
+2021.06.18
+把clk的IO擺得很靠近SRAM
+再把Data擺遠一點，用buffer讓他產生delay，就可以解決了。
+雖然clk接到SRAM還是有clk_tree，但是data的delay比較長。
+但是現在Signoff_hold會有負的，可是卻能過06_POST。
+
+把clk_period減少看看有沒有效。
+有效，但還不夠。
+clk_period=20: signohh_hold slack = -0.048
+clk_period=16: signohh_hold slack = -0.020
+clk_period=12: signohh_hold slack = -0.011
+有沒有可能即使Route_hold是正的，再繼續優化，可以讓Signoff為正
+優化前Route_hold最小=0，先儲存起來，不能再回來優化。
+->有是有效的，雖然優化後再Route_hold不明顯，但是signoff很明顯。
+clk_period=12: signohh_hold slack = -0.001
+還是有極限
+clk_period=10: signohh_hold slack = -0.019 優化Route_hold 3次了
+把面積變大試試看
+
+2016.06.19
+clk_period=10: core ultimize = 0.4
+Width:  916.74
+Height: 901.04
+Chip Area = 826019.4 um^2
+signohh_hold slack = 0.000
+
+clk_period=10: core ultimize = 0.4
+Width:  950.00
+Height: 850.00
+Chip Area = 807500 um^2
+signohh_hold slack = 0.000
+但是06跑不過，完全unknown
+
+clk_period=10: core ultimize = 0.5
+Width:  916.74
+Height: 901.04
+Chip Area = 826019.4 um^2
+signohh_hold slack = 0.000
+但是06跑不過，完全unknown
+
+clk_period=12: core ultimize = 0.5
+Width:  847.44
+Height: 820.4
+Chip Area = 826019.4 um^2
+signohh_hold slack = -0.000
+
+2016.06.20
+clk_period=10: core ultimize = 0.4
+Width:  918.72
+Height: 896.00
+Chip Area = 826019.4 um^2
+signohh_hold slack = 0.000
+
+clk_period=10: core ultimize = 0.5
+Width:  839
+Height: 825
+Chip Area = 826019.4 um^2
+signohh_hold slack = 0.000
+但是06跑不過，完全unknown
+
+---------------------------------
+clk_period=10: 
+設0.4
+Width:  916
+Height: 901
+把SRAM放角落，讓他有地方可以放buffer
+就搞定了!!!
+但restore失敗
+
+推測是rt_store程式碼的問題
+rt_store的輸入吃Q_inst(靠近SRAM_inst)，輸出要給D_data(靠近SRAM_data)
+
+
+floorplan不變，步驟一樣signoff居然會變，很奇怪。
+最後終於過了。
+
+
+---------------------------------
+2021.06.22 - 2demo
+clk_period=8:: core ultimize = 0.5
+Width:  887
+Height: 870
+
+過了過了過了。
