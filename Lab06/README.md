@@ -6,7 +6,7 @@ Synthesis Flow with Synopsys Design Compiler
 
 ## Design
 Lab06 Exercise  
-CheckSum (MC)
+CheckSum (CS)
 
 | Input | Description |
 | --- | --- |
