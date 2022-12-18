@@ -5,7 +5,7 @@ NCTU 2021 Spring Integrated Circuit Design Laboratory (ICLAB)
 Synthesis Flow with Synopsys Design Compiler
 
 ## Design
-Online Test
+Online Test  
 Length, angles of Triangle (OT)
 
 | Input | Description |
