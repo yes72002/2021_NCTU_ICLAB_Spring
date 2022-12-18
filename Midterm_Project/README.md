@@ -71,5 +71,5 @@ Advanced Microcontroller Bus Architecture (AMBA)
 + Advanced Microcontroller Bus Architecture (AMBA)
 + AXI 4 protocol
 + Handshake process
-+ Innovus tool
++ DRAM, SRAM
 
