@@ -1,0 +1,28 @@
+Facebook ICLAB_2021_spring_student
+https://www.facebook.com/groups/1310479339315540/permalink/1409112706118869/
+2021.03.31
+
+AXI note:
+1. DRAM = slave, design=master
+2. Send data   →  valid
+3. Receive data →  ready
+e.g:
+ARVALID: 
+design sends address to DRAM → master sends data while slave receives data.
+AWVALID:
+design sends address to DRAM → master sends data while slave receives data.
+BVALID:
+DRAM response write complete to design → slave sends data while master receives data.
+
+
+
+Facebook ICLAB_2021_spring_student
+https://www.facebook.com/groups/1310479339315540/permalink/1418547228508750/
+2021.04.14
+
+Sorry about that, there was a mistake in my DRAM design, resulting the write latency 
+be fixed at the parameter DRAM_W_LAT, in this case:1. However, after some consideration, 
+I decided that the write latency will be fixed at "1" for both functionality check and 
+performance check. This is because there is not much you can do to optimize your design 
+when the write latency is very large. (unlike read latency can be optimized through cache design) 
+All in all, the different latency rule will only be applied to read mode, and the write latency will be fixed at "1".
